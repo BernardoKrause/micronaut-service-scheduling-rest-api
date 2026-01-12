@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Controller("/services")
 public class ServiceController {
 
-    private Map<UUID, Service> serviceStore = new ConcurrentHashMap<>();
+    private final Map<UUID, Service> serviceStore = new ConcurrentHashMap<>();
 
     public ServiceController() {
         UUID id = UUID.randomUUID();
