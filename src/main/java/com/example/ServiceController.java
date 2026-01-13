@@ -1,26 +1,30 @@
 package com.example;
 
+import com.example.repository.ServiceRepository;
+import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Post;
+import jakarta.inject.Inject;
+import com.example.entity.Service;
+import jakarta.validation.Valid;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller("/services")
 public class ServiceController {
 
-    private final Map<UUID, Service> serviceStore = new ConcurrentHashMap<>();
-
-    public ServiceController() {
-        UUID id = UUID.randomUUID();
-        serviceStore.put(id, new Service(id, "agendamento", "agendamento de algum serviço", 3499.99, new Date()));
-    }
+    @Inject
+    private ServiceRepository serviceRepository;
 
     @Get
-    public Collection<Service> listServices() {
-        return serviceStore.values();
+    public List<Service> listServices() {
+        return serviceRepository.findAll();
+    }
+
+    @Post
+    public Service addService(@Body @Valid Service service) {
+        return serviceRepository.save(service);
     }
 }
