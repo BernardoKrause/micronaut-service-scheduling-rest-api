@@ -9,7 +9,7 @@ import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,16 +26,19 @@ public class Service {
     @NotBlank(message = "Type is required!")
     private String type;
 
-    @NotNull(message = "Value is required!")
+    @NotBlank(message = "Value is required!")
     private Double value;
 
-    @Nullable
-    private Date scheduled_for;
+    @NotBlank(message = "Date of Shedule is required!")
+    private LocalDate scheduled_for;
 
-    @Nullable
-    private Date opened_at;
+    @NotBlank(message = "opening date is required")
+    private LocalDate opened_at;
 
-    public Service(Long id, String description, String type, Double value, Date scheduled_for, @Nullable Date opened_at) {
+    public Service() {
+    }
+
+    public Service(Long id, String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at) {
         this.id = id;
         this.description = description;
         this.type = type;
@@ -43,17 +46,13 @@ public class Service {
         this.scheduled_for = scheduled_for;
         this.opened_at = opened_at;
     }
-
-    public Service(Long id, String description, String type, Double value, Date scheduled_for) {
-        this(id, description, type, value, scheduled_for, null);
-    }
-
-    // Construtor sem ID (para INSERT)
-    public Service(String description, String type, Double value, Date scheduled_for, Date opened_at) {
-        this(null, description, type, value, scheduled_for, opened_at);
-    }
-    public Service(String description, String type, Double value, Date scheduled_for) {
-        this(null, description, type, value, scheduled_for);
+    
+    public Service(String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at) {
+        this.description = description;
+        this.type = type;
+        this.value = value;
+        this.scheduled_for = scheduled_for;
+        this.opened_at = opened_at;
     }
 
     public Long getId() {
@@ -72,11 +71,35 @@ public class Service {
         return value;
     }
 
-    public Date getScheduled_for() {
+    public LocalDate getScheduled_for() {
         return scheduled_for;
     }
 
-    public Date getOpened_at() {
+    public LocalDate getOpened_at() {
         return opened_at;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
+
+    public void setScheduled_for(LocalDate scheduled_for) {
+        this.scheduled_for = scheduled_for;
+    }
+
+    public void setOpened_at(LocalDate opened_at) {
+        this.opened_at = opened_at;
     }
 }
