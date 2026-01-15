@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.entity.Requester;
 import io.micronaut.http.annotation.*;
 
 import java.util.Collection;
@@ -28,7 +29,7 @@ public class RequesterController {
     }
 
     @Patch("/{id}")
-    public Requester updateRequester(Requester requester) {
+    public Requester updateRequester(UUID id, Requester requester) {
         return requester;
     }
 
