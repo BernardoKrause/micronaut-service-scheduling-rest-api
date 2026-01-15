@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 
 import jakarta.inject.Inject;
 
+import java.util.Collection;
+
 @MicronautTest
 class MicronautServiceSchedulingRestApiTest {
 
@@ -18,4 +20,10 @@ class MicronautServiceSchedulingRestApiTest {
         Assertions.assertTrue(application.isRunning());
     }
 
+    @Test
+    public void initiallyThereIsOneService (ServiceClient serviceClient) {
+        Collection<Service> services = serviceClient.listServices();
+
+        Assertions.assertEquals(1, services.size());
+    }
 }
