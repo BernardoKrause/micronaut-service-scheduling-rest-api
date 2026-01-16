@@ -41,7 +41,7 @@ public class RequesterController {
         Requester existingRequester = requesterRepository.findById(id).get();
         existingRequester.setName(requester.getName());
         existingRequester.setEmail(requester.getEmail());
-        requesterRepository.save(existingRequester);
+        requesterRepository.update(existingRequester);
         return HttpResponse.ok();
     }
 
