@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import java.util.Collection;
+import java.util.List;
 
 @Controller("/requesters")
 public class RequesterController {

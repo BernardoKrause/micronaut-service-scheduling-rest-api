@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.entity.Service;
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
