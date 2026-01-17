@@ -32,19 +32,18 @@ public class ServiceController {
         return HttpResponse.ok(serviceRepository.save(service));
     }
 
-    @Put("/{id}")
+    @Patch("/{id}")
     public HttpResponse<Service> updateService(Long id, @Body @Valid Service service) {
-        if (serviceRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
-        }
-        Service existingService = serviceRepository.findById(id).get();
-        existingService.setDescription(service.getDescription());
-        existingService.setType(service.getType());
-        existingService.setValue(service.getValue());
-        existingService.setScheduled_for(service.getScheduled_for());
-        existingService.setOpened_at(service.getOpened_at());
-        serviceRepository.update(existingService);
-        return HttpResponse.ok();
+        return serviceRepository.findById(id).map(existingService -> {
+            existingService.setDescription(service.getDescription());
+            existingService.setType(service.getType());
+            existingService.setValue(service.getValue());
+            existingService.setScheduled_for(service.getScheduled_for());
+            existingService.setOpened_at(service.getOpened_at());
+            serviceRepository.update(existingService);
+
+            return HttpResponse.ok(existingService);
+        }).orElse(HttpResponse.notFound());
     }
 
     @Delete("/{id}")
