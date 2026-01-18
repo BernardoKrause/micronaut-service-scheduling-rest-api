@@ -34,6 +34,25 @@ public class RequesterController {
         return HttpResponse.created(requester);
     }
 
+    @Patch("/{id}")
+    public HttpResponse<Requester> patchRequester(Long id, @Body Requester requester) {
+        if (requesterRepository.findById(id).isEmpty()) {
+            return HttpResponse.notFound();
+        }
+
+        Requester existingRequester = requesterRepository.findById(id).get();
+
+        if (requester.getName() != null) {
+            existingRequester.setName(requester.getName());
+        }
+        if (requester.getEmail() != null) {
+            existingRequester.setEmail(requester.getEmail());
+        }
+
+        requesterRepository.update(existingRequester);
+        return HttpResponse.ok(existingRequester);
+    }
+
     @Put("/{id}")
     public HttpResponse<Requester> updateRequester(Long id, @Body @Valid Requester requester) {
         if (requesterRepository.findById(id).isEmpty()) {
