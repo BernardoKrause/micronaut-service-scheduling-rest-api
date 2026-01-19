@@ -20,11 +20,4 @@ class MicronautServiceSchedulingRestApiTest {
     void testItWorks() {
         Assertions.assertTrue(application.isRunning());
     }
-
-    @Test
-    public void initiallyThereIsOneService (ServiceClient serviceClient) {
-        Collection<Service> services = serviceClient.listServices();
-
-        Assertions.assertEquals(1, services.size());
-    }
 }

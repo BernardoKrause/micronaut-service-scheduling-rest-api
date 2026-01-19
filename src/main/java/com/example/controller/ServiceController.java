@@ -4,10 +4,13 @@ import com.example.entity.Service;
 import com.example.repository.ServiceRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
+import io.micronaut.security.annotation.Secured;
+import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import java.util.*;
 
+@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/services")
 public class ServiceController {
 
