@@ -53,7 +53,8 @@ public class ServiceController {
     @Patch("/{id}")
     public HttpResponse<Object> updateService(Long id, @Body @Valid ServiceDTO service) {
         try {
-            return HttpResponse.ok(serviceFacade.update(id, service).get());
+            serviceFacade.update(id, service);
+            return HttpResponse.noContent();
         } catch (ServiceNotFoundException e) {
             return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
@@ -64,7 +65,8 @@ public class ServiceController {
     @Delete("/{id}")
     public HttpResponse<Object> deleteService(Long id) {
         try {
-            return HttpResponse.ok(serviceFacade.delete(id).get());
+            serviceFacade.delete(id);
+            return HttpResponse.noContent();
         } catch (ServiceNotFoundException e) {
             return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
