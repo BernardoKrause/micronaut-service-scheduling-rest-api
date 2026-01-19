@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.entity.Requester;
+import com.example.facade.RequesterFacade;
 import com.example.repository.RequesterRepository;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -8,73 +9,71 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+
+import javax.management.ServiceNotFoundException;
 import java.util.Collection;
-import java.util.List;
 
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/requesters")
 public class RequesterController {
 
     @Inject
-    private RequesterRepository requesterRepository;
+    private RequesterFacade requesterFacade;
 
     @Get
-    public HttpResponse<Collection<Requester>> listRequesters() {
-        return HttpResponse.ok(requesterRepository.findAll());
+    public HttpResponse<Object> listRequesters() {
+        try {
+            return HttpResponse.ok(requesterFacade.list());
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
+        }
     }
 
     @Get("/{id}")
-    public HttpResponse<Requester> getRequesterById(Long id) {
-        if (requesterRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
+    public HttpResponse<Object> getRequesterById(Long id) {
+        try {
+            return HttpResponse.ok(requesterFacade.get(id).get());
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
         }
-        return HttpResponse.ok(requesterRepository.findById(id).get());
     }
 
     @Post
-    public HttpResponse<Requester> createRequester(@Body @Valid Requester requester) {
-        requesterRepository.save(requester);
-        return HttpResponse.created(requester);
+    public HttpResponse<Object> createRequester(@Body @Valid Requester requester) {
+        try {
+            return HttpResponse.ok(requesterFacade.create(requester));
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
+        }
     }
 
     @Patch("/{id}")
-    public HttpResponse<Requester> patchRequester(Long id, @Body Requester requester) {
-        if (requesterRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
+    public HttpResponse<Object> patchRequester(Long id, @Body Requester requester) {
+        try {
+            requesterFacade.update(id, requester);
+            return HttpResponse.noContent();
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
         }
-
-        Requester existingRequester = requesterRepository.findById(id).get();
-
-        if (requester.getName() != null) {
-            existingRequester.setName(requester.getName());
-        }
-        if (requester.getEmail() != null) {
-            existingRequester.setEmail(requester.getEmail());
-        }
-
-        requesterRepository.update(existingRequester);
-        return HttpResponse.ok(existingRequester);
-    }
-
-    @Put("/{id}")
-    public HttpResponse<Requester> updateRequester(Long id, @Body @Valid Requester requester) {
-        if (requesterRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
-        }
-        Requester existingRequester = requesterRepository.findById(id).get();
-        existingRequester.setName(requester.getName());
-        existingRequester.setEmail(requester.getEmail());
-        requesterRepository.update(existingRequester);
-        return HttpResponse.ok();
     }
 
     @Delete("/{id}")
-    public HttpResponse<Requester> deleteRequester(Long id) {
-        if (requesterRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
+    public HttpResponse<Object> deleteRequester(Long id) {
+        try {
+            requesterFacade.delete(id);
+            return HttpResponse.noContent();
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
         }
-        var existingRequester = requesterRepository.findById(id).get();
-        requesterRepository.delete(existingRequester);
-        return HttpResponse.ok(existingRequester);
     }
 }
