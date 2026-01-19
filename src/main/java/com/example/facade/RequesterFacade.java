@@ -1,107 +1,75 @@
 package com.example.facade;
 
-import com.example.dto.ServiceDTO;
 import com.example.entity.Requester;
-import com.example.entity.Service;
 import com.example.repository.RequesterRepository;
 import com.example.repository.ServiceRepository;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+
 import javax.management.ServiceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 @Singleton
-public class ServiceFacade {
+public class RequesterFacade {
 
 	private final ServiceRepository serviceRepository;
 	private final RequesterRepository requesterRepository;
 
 	@Inject
-	public ServiceFacade(ServiceRepository serviceRepository,
-						 RequesterRepository requesterRepository) {
+	public RequesterFacade(ServiceRepository serviceRepository,
+                           RequesterRepository requesterRepository) {
 		this.serviceRepository = serviceRepository;
 		this.requesterRepository = requesterRepository;
 	}
 
-	public List<Service> list() throws Exception{
-		return serviceRepository.findAll();
+	public List<Requester> list() throws Exception{
+		return requesterRepository.findAll();
 	}
 
-	public Optional<Service> get(Long id) throws Exception {
-        Optional<Service> service = serviceRepository.findById(id);
+	public Optional<Requester> get(Long id) throws Exception {
+        Optional<Requester> requester = requesterRepository.findById(id);
 
-        if (service.isEmpty()) {
-            throw new ServiceNotFoundException("Service not found: " + id);
+        if (requester.isEmpty()) {
+            throw new ServiceNotFoundException("Requester not found: " + id);
         }
 
-		return serviceRepository.findById(id);
+		return requester;
 	}
 
-	public Service create(ServiceDTO dto) throws Exception {
-		Optional<Requester> requester = requesterRepository.findById(dto.getRequesterId());
-
-        if(requester.isEmpty()) {
-            throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
-        }
-
-		Service service = new Service();
-		service.setDescription(dto.getDescription());
-		service.setType(dto.getType());
-		service.setValue(dto.getValue());
-		service.setScheduled_for(dto.getScheduled_for());
-		service.setOpened_at(dto.getOpened_at());
-		service.setRequester(requester.get());
-
-		return serviceRepository.save(service);
+	public Requester create(Requester requester) throws Exception {
+		return requesterRepository.save(requester);
 	}
 
-	public Optional<Service> update(Long id, ServiceDTO dto) throws Exception {
-        Optional<Service> service = serviceRepository.findById(id);
-        Optional<Requester> requester = requesterRepository.findById(dto.getRequesterId());
+	public Optional<Requester> update(Long id, Requester modifiedRequester) throws Exception {
+        Optional<Requester> existingRequester = requesterRepository.findById(id);
 
-        if (service.isEmpty()) {
-            throw new ServiceNotFoundException("Service not found: " + id);
+        if(existingRequester.isEmpty()) {
+            throw new ServiceNotFoundException("Requester not found: " + id);
         }
 
-        if(requester.isEmpty()) {
-            throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
+        Requester existingService = existingRequester.get();
+
+        if (modifiedRequester.getName() != null) {
+            existingService.setName(modifiedRequester.getName());
         }
 
-        Service existingService = service.get();
-
-        if(dto.getDescription() != null) {
-            existingService.setDescription(dto.getDescription());
+        if (modifiedRequester.getEmail() != null) {
+            existingService.setEmail(modifiedRequester.getEmail());
         }
 
-        if(dto.getValue() != null) {
-            existingService.setValue(dto.getValue());
-        }
-
-        if(dto.getType() != null) {
-            existingService.setType(dto.getType());
-        }
-
-        if(dto.getScheduled_for() != null) {
-            existingService.setScheduled_for(dto.getScheduled_for());
-        }
-
-        if(dto.getOpened_at() != null) {
-            existingService.setOpened_at(dto.getOpened_at());
-        }
-
-        return Optional.of(serviceRepository.update(existingService));
+        return Optional.of(requesterRepository.update(existingService));
 	}
 
-	public Optional<Service> delete(Long id) throws Exception {
-        Optional<Service> service = serviceRepository.findById(id);
+	public Optional<Requester> delete(Long id) throws Exception {
+        Optional<Requester> requester = requesterRepository.findById(id);
 
-        if (service.isEmpty()) {
-            throw new ServiceNotFoundException("Service not found: " + id);
+        if (requester.isEmpty()) {
+            throw new ServiceNotFoundException("Requester not found: " + id);
         }
 
-        serviceRepository.delete(service.get());
+        requesterRepository.delete(requester.get());
 
-        return service;
+        return requester;
 	}
 }
