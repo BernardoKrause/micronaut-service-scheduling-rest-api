@@ -2,57 +2,60 @@ package com.example.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.micronaut.core.annotation.Nullable;
+import com.example.entity.Requester;
 import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.Relation;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Serdeable
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@MappedEntity
+@MappedEntity("service")
 public class Service {
 
     @Id
     @GeneratedValue(GeneratedValue.Type.AUTO)
     private Long id;
 
-    @NotBlank(message = "Description is required!")
     private String description;
 
-    @NotBlank(message = "Type is required!")
     private String type;
 
-    @NotBlank(message = "Value is required!")
     private Double value;
 
-    @NotBlank(message = "Date of Shedule is required!")
     private LocalDate scheduled_for;
 
-    @NotBlank(message = "opening date is required")
     private LocalDate opened_at;
+
+    @Relation(value = Relation.Kind.MANY_TO_ONE)
+    private Requester requester;
 
     public Service() {
     }
 
-    public Service(Long id, String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at) {
+    public Service(Long id, String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at, Requester requester) {
         this.id = id;
         this.description = description;
         this.type = type;
         this.value = value;
         this.scheduled_for = scheduled_for;
         this.opened_at = opened_at;
+        this.requester = requester;
     }
     
-    public Service(String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at) {
+    public Service(String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at, Requester requester) {
         this.description = description;
         this.type = type;
         this.value = value;
         this.scheduled_for = scheduled_for;
         this.opened_at = opened_at;
+        this.requester = requester;
     }
 
     public Long getId() {
@@ -79,6 +82,10 @@ public class Service {
         return opened_at;
     }
 
+    public Requester getRequester() {
+        return requester;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -101,5 +108,9 @@ public class Service {
 
     public void setOpened_at(LocalDate opened_at) {
         this.opened_at = opened_at;
+    }
+
+    public void setRequester(Requester requester) {
+        this.requester = requester;
     }
 }

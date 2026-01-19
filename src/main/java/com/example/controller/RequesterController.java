@@ -7,7 +7,6 @@ import io.micronaut.http.annotation.*;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import java.util.Collection;
-import java.util.List;
 
 @Controller("/requesters")
 public class RequesterController {
@@ -51,18 +50,6 @@ public class RequesterController {
 
         requesterRepository.update(existingRequester);
         return HttpResponse.ok(existingRequester);
-    }
-
-    @Put("/{id}")
-    public HttpResponse<Requester> updateRequester(Long id, @Body @Valid Requester requester) {
-        if (requesterRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
-        }
-        Requester existingRequester = requesterRepository.findById(id).get();
-        existingRequester.setName(requester.getName());
-        existingRequester.setEmail(requester.getEmail());
-        requesterRepository.update(existingRequester);
-        return HttpResponse.ok();
     }
 
     @Delete("/{id}")
