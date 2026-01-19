@@ -18,57 +18,57 @@ public class ServiceController {
     private ServiceFacade serviceFacade;
 
     @Get
-    public HttpResponse<Collection<Service>> listServices() {
+    public HttpResponse<Object> listServices() {
         try {
             return HttpResponse.ok(serviceFacade.list());
         } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound();
+            return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
-            return HttpResponse.serverError();
+            return HttpResponse.serverError(e.getMessage());
         }
     }
 
     @Get("/{id}")
-    public HttpResponse<Service> getServiceById(Long id) {
+    public HttpResponse<Object> getServiceById(Long id) {
         try {
             return HttpResponse.ok(serviceFacade.get(id).get());
         } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound();
+            return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
-            return HttpResponse.serverError();
+            return HttpResponse.serverError(e.getMessage());
         }
     }
 
     @Post
-    public HttpResponse<Service> addService(@Body @Valid ServiceDTO service) {
+    public HttpResponse<Object> addService(@Body @Valid ServiceDTO service) {
         try {
             return HttpResponse.ok(serviceFacade.create(service));
         } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound();
+            return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
-            return HttpResponse.serverError();
+            return HttpResponse.serverError(e.getMessage());
         }
     }
 
     @Patch("/{id}")
-    public HttpResponse<Service> updateService(Long id, @Body @Valid ServiceDTO service) {
+    public HttpResponse<Object> updateService(Long id, @Body @Valid ServiceDTO service) {
         try {
             return HttpResponse.ok(serviceFacade.update(id, service).get());
         } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound();
+            return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
-            return HttpResponse.serverError();
+            return HttpResponse.serverError(e.getMessage());
         }
     }
 
     @Delete("/{id}")
-    public HttpResponse<Service> deleteService(Long id) {
+    public HttpResponse<Object> deleteService(Long id) {
         try {
             return HttpResponse.ok(serviceFacade.delete(id).get());
         } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound();
+            return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
-            return HttpResponse.serverError();
+            return HttpResponse.serverError(e.getMessage());
         }
     }
 }

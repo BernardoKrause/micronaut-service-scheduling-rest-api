@@ -20,7 +20,7 @@ import java.util.Set;
 public class Service {
 
     @Id
-    @GeneratedValue(GeneratedValue.Type.AUTO)
+    @GeneratedValue
     private Long id;
 
     private String description;

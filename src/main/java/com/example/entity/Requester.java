@@ -17,7 +17,7 @@ import java.util.Set;
 public class Requester {
 
     @Id
-    @GeneratedValue(GeneratedValue.Type.AUTO)
+    @GeneratedValue
     private Long id;
 
     @NotBlank(message = "Name is Required!")
