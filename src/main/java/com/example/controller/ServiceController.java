@@ -2,6 +2,9 @@ package com.example.controller;
 
 import com.example.dto.ServiceDTO;
 import com.example.entity.Service;
+import com.example.repository.ServiceRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import com.example.facade.ServiceFacade;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -21,9 +24,9 @@ public class ServiceController {
     private ServiceFacade serviceFacade;
 
     @Get
-    public HttpResponse<Object> listServices() {
+    public HttpResponse<Object> listServices(@Valid Pageable pageable) {
         try {
-            return HttpResponse.ok(serviceFacade.list());
+            return HttpResponse.ok(serviceFacade.list(pageable));
         } catch (ServiceNotFoundException e) {
             return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
@@ -43,9 +46,9 @@ public class ServiceController {
     }
 
     @Post
-    public HttpResponse<Object> addService(@Body @Valid ServiceDTO service) {
+    public HttpResponse<Object> addService(@Body @Valid List<ServiceDTO> services) {
         try {
-            return HttpResponse.ok(serviceFacade.create(service));
+            return HttpResponse.created(serviceFacade.create(services));
         } catch (ServiceNotFoundException e) {
             return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {

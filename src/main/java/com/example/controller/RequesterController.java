@@ -3,6 +3,8 @@ package com.example.controller;
 import com.example.entity.Requester;
 import com.example.facade.RequesterFacade;
 import com.example.repository.RequesterRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
@@ -21,9 +23,9 @@ public class RequesterController {
     private RequesterFacade requesterFacade;
 
     @Get
-    public HttpResponse<Object> listRequesters() {
+    public HttpResponse<Object> listRequesters(@Valid Pageable pageable) {
         try {
-            return HttpResponse.ok(requesterFacade.list());
+            return HttpResponse.ok(requesterFacade.list(pageable));
         } catch (ServiceNotFoundException e) {
             return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
@@ -43,9 +45,9 @@ public class RequesterController {
     }
 
     @Post
-    public HttpResponse<Object> createRequester(@Body @Valid Requester requester) {
+    public HttpResponse<Object> createRequester(@Body @Valid List<Requester> requesters) {
         try {
-            return HttpResponse.ok(requesterFacade.create(requester));
+            return HttpResponse.created(requesterFacade.create(requesters));
         } catch (ServiceNotFoundException e) {
             return HttpResponse.notFound(e.getMessage());
         } catch (Exception e) {
