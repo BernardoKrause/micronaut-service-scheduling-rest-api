@@ -68,14 +68,9 @@ public class ServiceFacade {
 
 	public Optional<Service> update(Long id, ServiceDTO dto) throws Exception {
         Optional<Service> service = serviceRepository.findById(id);
-        Optional<Requester> requester = requesterRepository.findById(dto.getRequesterId());
 
         if (service.isEmpty()) {
             throw new ServiceNotFoundException("Service not found: " + id);
-        }
-
-        if(requester.isEmpty()) {
-            throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
         }
 
         Service existingService = service.get();
@@ -98,6 +93,16 @@ public class ServiceFacade {
 
         if(dto.getOpened_at() != null) {
             existingService.setOpened_at(dto.getOpened_at());
+        }
+
+        if(dto.getRequesterId() != null) {
+            Optional<Requester> requester = requesterRepository.findById(dto.getRequesterId());
+
+            if(requester.isEmpty()) {
+                throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
+            }
+
+            existingService.setRequester(requester.get());
         }
 
         return Optional.of(serviceRepository.update(existingService));
