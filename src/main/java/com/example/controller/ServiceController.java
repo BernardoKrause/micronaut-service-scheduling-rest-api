@@ -1,15 +1,19 @@
 package com.example.controller;
 
+import com.example.dto.ServiceDTO;
 import com.example.entity.Service;
 import com.example.repository.ServiceRepository;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
+import com.example.facade.ServiceFacade;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
+
+import javax.management.ServiceNotFoundException;
 import java.util.*;
 
 @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -17,49 +21,62 @@ import java.util.*;
 public class ServiceController {
 
     @Inject
-    private ServiceRepository serviceRepository;
+    private ServiceFacade serviceFacade;
 
     @Get
-    public HttpResponse<Page<Service>> listServices(@Valid Pageable pageable) {
-        Page<Service> page = serviceRepository.findAll(pageable);
-        return HttpResponse.ok(page);
+    public HttpResponse<Object> listServices(@Valid Pageable pageable) {
+        try {
+            return HttpResponse.ok(serviceFacade.list(pageable));
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
+        }
     }
 
     @Get("/{id}")
-    public HttpResponse<Service> getServiceById(Long id) {
-        if (serviceRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
+    public HttpResponse<Object> getServiceById(Long id) {
+        try {
+            return HttpResponse.ok(serviceFacade.get(id).get());
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
         }
-        return HttpResponse.ok(serviceRepository.findById(id).get());
     }
 
     @Post
-    public HttpResponse<List<Service>> addService(@Body @Valid List<Service> services) {
-        List<Service> saved = serviceRepository.saveAll(services);
-        return HttpResponse.created(saved);
+    public HttpResponse<Object> addService(@Body @Valid List<ServiceDTO> services) {
+        try {
+            return HttpResponse.created(serviceFacade.create(services));
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
+        }
     }
 
     @Patch("/{id}")
-    public HttpResponse<Service> updateService(Long id, @Body @Valid Service service) {
-        return serviceRepository.findById(id).map(existingService -> {
-            existingService.setDescription(service.getDescription());
-            existingService.setType(service.getType());
-            existingService.setValue(service.getValue());
-            existingService.setScheduled_for(service.getScheduled_for());
-            existingService.setOpened_at(service.getOpened_at());
-            serviceRepository.update(existingService);
-
-            return HttpResponse.ok(existingService);
-        }).orElse(HttpResponse.notFound());
+    public HttpResponse<Object> updateService(Long id, @Body @Valid ServiceDTO service) {
+        try {
+            serviceFacade.update(id, service);
+            return HttpResponse.noContent();
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
+        }
     }
 
     @Delete("/{id}")
-    public HttpResponse<Service> deleteService(Long id) {
-        if (serviceRepository.findById(id).isEmpty()) {
-            return HttpResponse.notFound();
+    public HttpResponse<Object> deleteService(Long id) {
+        try {
+            serviceFacade.delete(id);
+            return HttpResponse.noContent();
+        } catch (ServiceNotFoundException e) {
+            return HttpResponse.notFound(e.getMessage());
+        } catch (Exception e) {
+            return HttpResponse.serverError(e.getMessage());
         }
-        var existingService = serviceRepository.findById(id).get();
-        serviceRepository.delete(existingService);
-        return HttpResponse.ok(existingService);
     }
 }
