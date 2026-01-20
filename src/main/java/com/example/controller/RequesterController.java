@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 
 import javax.management.ServiceNotFoundException;
 import java.util.Collection;
+import java.util.List;
 
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/requesters")

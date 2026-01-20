@@ -3,6 +3,8 @@ package com.example.facade;
 import com.example.entity.Requester;
 import com.example.repository.RequesterRepository;
 import com.example.repository.ServiceRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -23,8 +25,8 @@ public class RequesterFacade {
 		this.requesterRepository = requesterRepository;
 	}
 
-	public List<Requester> list() throws Exception{
-		return requesterRepository.findAll();
+	public Page<Requester> list(Pageable pageable) throws Exception{
+		return requesterRepository.findAll( pageable );
 	}
 
 	public Optional<Requester> get(Long id) throws Exception {
@@ -37,8 +39,8 @@ public class RequesterFacade {
 		return requester;
 	}
 
-	public Requester create(Requester requester) throws Exception {
-		return requesterRepository.save(requester);
+	public List<Requester> create(List<Requester> requesters) throws Exception {
+		return requesterRepository.saveAll(requesters);
 	}
 
 	public Optional<Requester> update(Long id, Requester modifiedRequester) throws Exception {
