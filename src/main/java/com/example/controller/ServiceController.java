@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.entity.Service;
 import com.example.repository.ServiceRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
@@ -18,8 +20,9 @@ public class ServiceController {
     private ServiceRepository serviceRepository;
 
     @Get
-    public HttpResponse<Collection<Service>> listServices() {
-        return HttpResponse.ok(serviceRepository.findAll());
+    public HttpResponse<Page<Service>> listServices(@Valid Pageable pageable) {
+        Page<Service> page = serviceRepository.findAll(pageable);
+        return HttpResponse.ok(page);
     }
 
     @Get("/{id}")
@@ -31,8 +34,9 @@ public class ServiceController {
     }
 
     @Post
-    public HttpResponse<Service> addService(@Body @Valid Service service) {
-        return HttpResponse.ok(serviceRepository.save(service));
+    public HttpResponse<List<Service>> addService(@Body @Valid List<Service> services) {
+        List<Service> saved = serviceRepository.saveAll(services);
+        return HttpResponse.created(saved);
     }
 
     @Patch("/{id}")

@@ -2,8 +2,10 @@ package com.example;
 
 import com.example.entity.Service;
 import com.example.repository.ServiceRepository;
-import io.micronaut.context.annotation.Replaces;
+import io.micronaut.context.annotation.Property;
 import io.micronaut.core.type.Argument;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -24,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @MicronautTest
+@Property(name = "AUTH_USER", value = "test-user")
+@Property(name = "AUTH_SECRET", value = "test-pass")
 public class ServiceControllerTest {
 
     @Inject
@@ -47,6 +51,9 @@ public class ServiceControllerTest {
         mockService.setOpened_at(LocalDate.now());
         mockService.setScheduled_for(LocalDate.now());
 
+        when(serviceRepository.findAll(any(Pageable.class)))
+                .thenReturn(Page.of(List.of(mockService), Pageable.from(0, 10), 1L));
+
         when(serviceRepository.findById(1L)).thenReturn(Optional.of(mockService));
         when(serviceRepository.findAll()).thenReturn(List.of(mockService));
         when(serviceRepository.findById(1L)).thenReturn(Optional.of(mockService));
@@ -54,32 +61,32 @@ public class ServiceControllerTest {
     }
 
     @MockBean(ServiceRepository.class)
-    @Replaces(ServiceRepository.class)
     ServiceRepository serviceRepository() {
         return mock(ServiceRepository.class);
     }
 
     @Test
     void testGetServicesReturnsListAndValidData() {
-        Argument<List<Map<String, Object>>> listaDeServices = Argument.listOf(
-                Argument.mapOf(String.class, Object.class)
-        );
+        Argument<Map<String, Object>> pageArgument = Argument.mapOf(String.class, Object.class);
 
-        HttpResponse<List<Map<String, Object>>> response = client.toBlocking().exchange(
-                HttpRequest.GET("/services"), listaDeServices
+        HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
+                HttpRequest.GET("/services"), pageArgument
         );
 
         assertEquals(HttpStatus.OK, response.getStatus());
 
-        List<Map<String, Object>> body = response.body();
-
+        Map<String, Object> body = response.body();
         assertNotNull(body);
-        assertFalse(body.isEmpty());
 
-        Map<String, Object> firstService = body.get(0);
+        List<Map<String, Object>> content = (List<Map<String, Object>>) body.get("content");
+
+        assertNotNull(content);
+        assertFalse(content.isEmpty());
+
+        Map<String, Object> firstService = content.get(0);
         assertEquals("Limpeza", firstService.get("description"));
 
-        verify(serviceRepository, atLeastOnce()).findAll();
+        verify(serviceRepository, atLeastOnce()).findAll(any(io.micronaut.data.model.Pageable.class));
     }
 
     @Test
@@ -103,20 +110,24 @@ public class ServiceControllerTest {
 
     @Test
     void testPostService() {
-        HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
-                HttpRequest.POST("/services/", mockService),
-                Argument.mapOf(String.class, Object.class)
+        List<Map<String, Object>> newService = List.of(Map.of(
+                "description", "Limpeza",
+                "type", "Geral",
+                "value", 150.0,
+                "opened_at", "2026-01-20",
+                "scheduled_for", "2026-01-23"
+        ));
+
+        when(serviceRepository.saveAll(anyList())).thenReturn(List.of(mockService));
+
+        HttpResponse <List<Map<String, Object>>> response = client.toBlocking().exchange(
+                HttpRequest.POST("/services", newService),
+                Argument.listOf(Argument.mapOf(String.class, Object.class))
         );
 
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-        Map<String, Object> body = response.body();
-
-        assertNotNull(body);
-        assertEquals("Limpeza", body.get("description"));
-        assertEquals(150.0, body.get("value"));
-
-        verify(serviceRepository, atLeastOnce()).save(any(Service.class));
+        assertEquals(HttpStatus.CREATED, response.getStatus());
+        assertNotNull(response.body());
+        assertEquals("Limpeza", response.body().get(0).get("description"));
     }
 
     @Test

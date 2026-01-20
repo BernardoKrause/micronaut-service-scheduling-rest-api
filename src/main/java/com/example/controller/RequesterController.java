@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.entity.Requester;
 import com.example.repository.RequesterRepository;
+import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
@@ -19,8 +21,9 @@ public class RequesterController {
     private RequesterRepository requesterRepository;
 
     @Get
-    public HttpResponse<Collection<Requester>> listRequesters() {
-        return HttpResponse.ok(requesterRepository.findAll());
+    public HttpResponse<Page<Requester>> listRequesters(@Valid Pageable pageable) {
+        Page<Requester> page = requesterRepository.findAll(pageable);
+        return HttpResponse.ok(page);
     }
 
     @Get("/{id}")
@@ -32,9 +35,10 @@ public class RequesterController {
     }
 
     @Post
-    public HttpResponse<Requester> createRequester(@Body @Valid Requester requester) {
-        requesterRepository.save(requester);
-        return HttpResponse.created(requester);
+    public HttpResponse<List<Requester>> createRequester(@Body @Valid List<Requester> requesters) {
+        List<Requester> saved = requesterRepository.saveAll(requesters);
+
+        return HttpResponse.created(saved);
     }
 
     @Put("/{id}")
