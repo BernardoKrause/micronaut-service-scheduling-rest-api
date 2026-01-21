@@ -115,7 +115,8 @@ public class ServiceControllerTest {
                 "type", "Geral",
                 "value", 150.0,
                 "opened_at", "2026-01-20",
-                "scheduled_for", "2026-01-23"
+                "scheduled_for", "2026-01-23",
+                "requesterId", 1L
         ));
 
         when(serviceRepository.saveAll(anyList())).thenReturn(List.of(mockService));
@@ -145,12 +146,7 @@ public class ServiceControllerTest {
                 Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-        Map<String, Object> body = response.body();
-
-        assertNotNull(body);
-        assertEquals(200.0, body.get("value"));
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
 
         verify(serviceRepository, atLeastOnce()).update(any(Service.class));
     }
@@ -166,11 +162,7 @@ public class ServiceControllerTest {
                 Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-        Map<String, Object> body = response.body();
-        assertNotNull(body);
-        assertEquals("Limpeza", body.get("description"));
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
 
         verify(serviceRepository, atLeastOnce()).delete(any(Service.class));
     }

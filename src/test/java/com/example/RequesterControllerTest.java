@@ -4,6 +4,7 @@ import com.example.entity.Requester;
 import com.example.repository.RequesterRepository;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.core.type.Argument;
+import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -58,25 +59,26 @@ public class RequesterControllerTest {
 
     @Test
     void testGetRequesterReturnsListAndValidData() {
-        Argument<List<Map<String, Object>>> listaDeRequesters = Argument.listOf(
-                Argument.mapOf(String.class, Object.class)
-        );
+        Argument<Map<String, Object>> pageArgument = Argument.mapOf(String.class, Object.class);
 
-        HttpResponse<List<Map<String, Object>>> response = client.toBlocking().exchange(
-                HttpRequest.GET("/requesters"), listaDeRequesters
+        HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
+                HttpRequest.GET("/requesters"), pageArgument
         );
 
         assertEquals(HttpStatus.OK, response.getStatus());
 
-        List<Map<String, Object>> body = response.body();
-
+        Map<String, Object> body = response.body();
         assertNotNull(body);
-        assertFalse(body.isEmpty());
 
-        Map<String, Object> firstRequester = body.get(0);
-        assertEquals("teste", firstRequester.get("name"));
+        List<Map<String, Object>> content = (List<Map<String, Object>>) body.get("content");
 
-        verify(requesterRepository, atLeastOnce()).findAll();
+        assertNotNull(content);
+        assertFalse(content.isEmpty());
+
+        Map<String, Object> firstService = content.get(0);
+        assertEquals("Limpeza", firstService.get("description"));
+
+        verify(requesterRepository, atLeastOnce()).findAll(any(Pageable.class));
     }
 
     @Test
@@ -100,20 +102,21 @@ public class RequesterControllerTest {
 
     @Test
     void testPostRequester() {
-        HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
-                HttpRequest.POST("/requesters/", mockRequester),
-                Argument.mapOf(String.class, Object.class)
+        List<Map<String, Object>> newRequester = List.of(Map.of(
+                "name", "teste",
+                "email", "teste@teste.com"
+        ));
+
+        when(requesterRepository.saveAll(anyList())).thenReturn(List.of(mockRequester));
+
+        HttpResponse <List<Map<String, Object>>> response = client.toBlocking().exchange(
+                HttpRequest.POST("/requesters", newRequester),
+                Argument.listOf(Argument.mapOf(String.class, Object.class))
         );
 
         assertEquals(HttpStatus.CREATED, response.getStatus());
-
-        Map<String, Object> body = response.body();
-
-        assertNotNull(body);
-        assertEquals("teste", body.get("name"));
-        assertEquals("teste@teste.com", body.get("email"));
-
-        verify(requesterRepository, atLeastOnce()).save(any(Requester.class));
+        assertNotNull(response.body());
+        assertEquals("teste", response.body().get(0).get("name"));
     }
 
     @Test
@@ -131,12 +134,7 @@ public class RequesterControllerTest {
             Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-        Map<String, Object> body = response.body();
-
-        assertNotNull(body);
-        assertEquals("teste1", body.get("name"));
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
 
         verify(requesterRepository, atLeastOnce()).update(any(Requester.class));
     }
@@ -152,11 +150,7 @@ public class RequesterControllerTest {
                 Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.OK, response.getStatus());
-
-        Map<String, Object> body = response.body();
-        assertNotNull(body);
-        assertEquals("teste", body.get("name"));
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
 
         verify(requesterRepository, atLeastOnce()).delete(any(Requester.class));
     }
