@@ -47,10 +47,10 @@ public class ServiceFacade {
         List<Service> listServices = new ArrayList<>();
 
         for(ServiceDTO dto : dtos){
-            requester = requesterRepository.findById(dto.getRequesterId());
+            requester = requesterRepository.findById(dto.getRequester_id());
 
             if(requester.isEmpty()) {
-                throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
+                throw new ServiceNotFoundException("Requester not found: " + dto.getRequester_id());
             }
 
             service = new Service();
@@ -95,11 +95,11 @@ public class ServiceFacade {
             existingService.setOpened_at(dto.getOpened_at());
         }
 
-        if(dto.getRequesterId() != null) {
-            Optional<Requester> requester = requesterRepository.findById(dto.getRequesterId());
+        if(dto.getRequester_id() != null) {
+            Optional<Requester> requester = requesterRepository.findById(dto.getRequester_id());
 
             if(requester.isEmpty()) {
-                throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
+                throw new ServiceNotFoundException("Requester not found: " + dto.getRequester_id());
             }
 
             existingService.setRequester(requester.get());

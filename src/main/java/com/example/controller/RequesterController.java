@@ -2,8 +2,6 @@ package com.example.controller;
 
 import com.example.entity.Requester;
 import com.example.facade.RequesterFacade;
-import com.example.repository.RequesterRepository;
-import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -13,16 +11,15 @@ import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 
 import javax.management.ServiceNotFoundException;
-import java.util.Collection;
 import java.util.List;
 
-@Secured(SecurityRule.IS_AUTHENTICATED)
 @Controller("/requesters")
 public class RequesterController {
 
     @Inject
     private RequesterFacade requesterFacade;
 
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @Get
     public HttpResponse<Object> listRequesters(@Valid Pageable pageable) {
         try {
@@ -34,6 +31,7 @@ public class RequesterController {
         }
     }
 
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @Get("/{id}")
     public HttpResponse<Object> getRequesterById(Long id) {
         try {
@@ -45,17 +43,13 @@ public class RequesterController {
         }
     }
 
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Post
-    public HttpResponse<Object> createRequester(@Body @Valid List<Requester> requesters) {
-        try {
-            return HttpResponse.created(requesterFacade.create(requesters));
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Object> addRequester(@Body @Valid List<Requester> requesters) throws Exception {
+        return HttpResponse.created(requesterFacade.create(requesters));
     }
 
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Patch("/{id}")
     public HttpResponse<Object> patchRequester(Long id, @Body Requester requester) {
         try {
@@ -68,6 +62,7 @@ public class RequesterController {
         }
     }
 
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Delete("/{id}")
     public HttpResponse<Object> deleteRequester(Long id) {
         try {

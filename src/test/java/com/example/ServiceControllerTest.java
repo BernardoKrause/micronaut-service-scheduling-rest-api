@@ -116,7 +116,7 @@ public class ServiceControllerTest {
                 "value", 150.0,
                 "opened_at", "2026-01-20",
                 "scheduled_for", "2026-01-23",
-                "requesterId", 1L
+                "requester_id", 1L
         ));
 
         when(serviceRepository.saveAll(anyList())).thenReturn(List.of(mockService));

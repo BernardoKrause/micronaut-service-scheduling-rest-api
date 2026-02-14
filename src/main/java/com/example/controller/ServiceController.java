@@ -13,13 +13,14 @@ import jakarta.validation.Valid;
 import javax.management.ServiceNotFoundException;
 import java.util.*;
 
-@Secured(SecurityRule.IS_AUTHENTICATED)
+@Valid
 @Controller("/services")
 public class ServiceController {
 
     @Inject
     private ServiceFacade serviceFacade;
 
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @Get
     public HttpResponse<Object> listServices(@Valid Pageable pageable) {
         try {
@@ -31,6 +32,7 @@ public class ServiceController {
         }
     }
 
+    @Secured(SecurityRule.IS_ANONYMOUS)
     @Get("/{id}")
     public HttpResponse<Object> getServiceById(Long id) {
         try {
@@ -42,17 +44,13 @@ public class ServiceController {
         }
     }
 
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Post
-    public HttpResponse<Object> addService(@Body @Valid List<ServiceDTO> services) {
-        try {
-            return HttpResponse.created(serviceFacade.create(services));
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Object> addService(@Body List<@Valid ServiceDTO> services) throws Exception {
+        return HttpResponse.created(serviceFacade.create(services));
     }
 
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Patch("/{id}")
     public HttpResponse<Object> updateService(Long id, @Body @Valid ServiceDTO service) {
         try {
@@ -65,6 +63,7 @@ public class ServiceController {
         }
     }
 
+    @Secured(SecurityRule.IS_AUTHENTICATED)
     @Delete("/{id}")
     public HttpResponse<Object> deleteService(Long id) {
         try {

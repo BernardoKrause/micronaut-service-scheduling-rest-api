@@ -132,6 +132,10 @@
       <artifactId>micronaut-reactor</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>io.micronaut.validation</groupId>
+      <artifactId>micronaut-validation</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -189,6 +193,11 @@
             <path>
               <groupId>io.micronaut.security</groupId>
               <artifactId>micronaut-security-annotations</artifactId>
+            </path>
+            <path>
+              <groupId>io.micronaut.validation</groupId>
+              <artifactId>micronaut-validation-processor</artifactId>
+              <version>${micronaut.validation.version}</version>
             </path>
           </annotationProcessorPaths>
           <compilerArgs>
