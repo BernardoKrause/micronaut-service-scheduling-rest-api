@@ -2,6 +2,7 @@ package com.example.facade;
 
 import com.example.dto.filter.RequesterFiltersDTO;
 import com.example.entity.Requester;
+import com.example.entity.Service;
 import com.example.repository.RequesterRepository;
 import com.example.repository.ServiceRepository;
 import io.micronaut.data.model.Page;
@@ -94,4 +95,16 @@ public class RequesterFacade {
 
         return requester;
 	}
+
+    public Optional<Page<Service>> listServicesByRequester(Long id, Pageable pageble) throws Exception {
+        Optional<Requester> requester = requesterRepository.findById(id);
+
+        if (requester.isEmpty()) {
+            throw new ServiceNotFoundException("Requester not found: " + id);
+        }
+
+        Page<Service> services = serviceRepository.findByRequesterId(id, pageble);
+
+        return Optional.of(services);
+    }
 }
