@@ -1,6 +1,8 @@
 package com.example;
 
+import com.example.entity.Requester;
 import com.example.entity.Service;
+import com.example.repository.RequesterRepository;
 import com.example.repository.ServiceRepository;
 import io.micronaut.context.annotation.Property;
 import io.micronaut.core.type.Argument;
@@ -37,11 +39,21 @@ public class ServiceControllerTest {
     @Inject
     ServiceRepository serviceRepository;
 
+    @Inject
+    RequesterRepository requesterRepository;
+
     private Service mockService;
 
     @BeforeEach
     void setup() {
         reset(serviceRepository);
+
+        // 1. Criar e salvar um Requester real no H2 para satisfazer a FK
+        Requester requester = new Requester();
+        requester.setId(1L);
+        requester.setName("Cliente Teste");
+        requester.setEmail("cliente@teste.com");
+        requesterRepository.save(requester);
 
         mockService = new Service();
         mockService.setId(1L);
@@ -58,6 +70,7 @@ public class ServiceControllerTest {
         when(serviceRepository.findAll()).thenReturn(List.of(mockService));
         when(serviceRepository.findById(1L)).thenReturn(Optional.of(mockService));
         when(serviceRepository.save(any(Service.class))).thenReturn(mockService);
+
     }
 
     @MockBean(ServiceRepository.class)
@@ -146,7 +159,7 @@ public class ServiceControllerTest {
                 Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+        assertEquals(HttpStatus.OK, response.getStatus());
 
         verify(serviceRepository, atLeastOnce()).update(any(Service.class));
     }
@@ -162,7 +175,7 @@ public class ServiceControllerTest {
                 Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+        assertEquals(HttpStatus.OK, response.getStatus());
 
         verify(serviceRepository, atLeastOnce()).delete(any(Service.class));
     }

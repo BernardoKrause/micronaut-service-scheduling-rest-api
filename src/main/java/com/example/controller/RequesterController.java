@@ -10,7 +10,6 @@ import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 
-import javax.management.ServiceNotFoundException;
 import java.util.List;
 
 @Controller("/requesters")
@@ -21,26 +20,16 @@ public class RequesterController {
 
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Get
-    public HttpResponse<Object> listRequesters(@Valid Pageable pageable) {
-        try {
-            return HttpResponse.ok(requesterFacade.list(pageable));
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Object> listRequesters(@Valid Pageable pageable) throws Exception {
+        return HttpResponse.ok(requesterFacade.list(pageable));
     }
 
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Get("/{id}")
-    public HttpResponse<Object> getRequesterById(Long id) {
-        try {
-            return HttpResponse.ok(requesterFacade.get(id).get());
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Requester> getRequesterById(Long id) throws Exception {
+        return requesterFacade.get(id)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.notFound());
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -51,27 +40,17 @@ public class RequesterController {
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
     @Patch("/{id}")
-    public HttpResponse<Object> patchRequester(Long id, @Body Requester requester) {
-        try {
-            requesterFacade.update(id, requester);
-            return HttpResponse.noContent();
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Requester> patchRequester(Long id, @Body Requester requester) throws Exception {
+            return requesterFacade.update(id, requester)
+                    .map(HttpResponse::ok)
+                    .orElse(HttpResponse.notFound());
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
     @Delete("/{id}")
-    public HttpResponse<Object> deleteRequester(Long id) {
-        try {
-            requesterFacade.delete(id);
-            return HttpResponse.noContent();
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Requester> deleteRequester(Long id) throws Exception {
+        return requesterFacade.delete(id)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.notFound());
     }
 }
