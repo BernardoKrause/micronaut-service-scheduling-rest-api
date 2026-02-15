@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.filter.RequesterFiltersDTO;
 import com.example.entity.Requester;
 import com.example.facade.RequesterFacade;
 import io.micronaut.data.model.Pageable;
@@ -20,7 +21,7 @@ public class RequesterController {
 
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Get
-    public HttpResponse<Object> listRequesters(@Valid Pageable pageable) throws Exception {
+    public HttpResponse<Object> listRequesters(@Valid RequesterFiltersDTO pageable) throws Exception {
         return HttpResponse.ok(requesterFacade.list(pageable));
     }
 

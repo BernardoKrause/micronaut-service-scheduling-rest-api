@@ -1,5 +1,6 @@
 package com.example.facade;
 
+import com.example.dto.filter.RequesterFiltersDTO;
 import com.example.entity.Requester;
 import com.example.repository.RequesterRepository;
 import com.example.repository.ServiceRepository;
@@ -25,8 +26,16 @@ public class RequesterFacade {
 		this.requesterRepository = requesterRepository;
 	}
 
-	public Page<Requester> list(Pageable pageable) throws Exception{
-		return requesterRepository.findAll( pageable );
+	public Page<Requester> list(RequesterFiltersDTO filters) throws Exception{
+		return requesterRepository.findWithFilters(
+			filters.getId(),
+			filters.getFullName(),
+			filters.getEmail(),
+			filters.getDepartment(),
+			filters.getUserName(),
+			filters.getPhoneNumber(),
+			filters
+		);
 	}
 
 	public Optional<Requester> get(Long id) throws Exception {

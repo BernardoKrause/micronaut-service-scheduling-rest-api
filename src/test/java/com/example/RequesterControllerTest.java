@@ -54,6 +54,8 @@ public class RequesterControllerTest {
         when(requesterRepository.save(any(Requester.class))).thenReturn(mockRequester);
         when(requesterRepository.findAll(any(Pageable.class)))
                 .thenReturn(Page.of(List.of(mockRequester), Pageable.from(0, 10), 1L));
+        when(requesterRepository.findWithFilters(any(), any(), any(), any(), any(), any(), any(Pageable.class)))
+                .thenReturn(Page.of(List.of(mockRequester), Pageable.from(0, 10), 1L));
     }
 
     @MockBean(RequesterRepository.class)
@@ -83,7 +85,7 @@ public class RequesterControllerTest {
         Map<String, Object> firstRequester = content.get(0);
         assertEquals("teste", firstRequester.get("fullName"));
 
-        verify(requesterRepository, atLeastOnce()).findAll(any(Pageable.class));
+        verify(requesterRepository, atLeastOnce()).findWithFilters(any(), any(), any(), any(), any(), any(), any(Pageable.class));
     }
 
     @Test
