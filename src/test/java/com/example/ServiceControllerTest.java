@@ -68,6 +68,8 @@ public class ServiceControllerTest {
 
         when(serviceRepository.findAll(any(Pageable.class)))
                 .thenReturn(Page.of(List.of(mockService), Pageable.from(0, 10), 1L));
+        when(serviceRepository.FindWithFilters(any(), any(), any(), any(), any(), any(Pageable.class)))
+                .thenReturn(Page.of(List.of(mockService), Pageable.from(0, 10), 1L));
 
         when(serviceRepository.findById(1L)).thenReturn(Optional.of(mockService));
         when(serviceRepository.findAll()).thenReturn(List.of(mockService));
@@ -102,7 +104,7 @@ public class ServiceControllerTest {
         Map<String, Object> firstService = content.get(0);
         assertEquals("Limpeza", firstService.get("description"));
 
-        verify(serviceRepository, atLeastOnce()).findAll(any(io.micronaut.data.model.Pageable.class));
+        verify(serviceRepository, atLeastOnce()).FindWithFilters(any(), any(), any(), any(), any(), any(io.micronaut.data.model.Pageable.class));
     }
 
     @Test
