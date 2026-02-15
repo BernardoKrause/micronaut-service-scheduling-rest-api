@@ -28,7 +28,6 @@ public class RequesterFacade {
 
 	public Page<Requester> list(RequesterFiltersDTO filters) throws Exception{
 		return requesterRepository.findWithFilters(
-			filters.getId(),
 			filters.getFullName(),
 			filters.getEmail(),
 			filters.getDepartment(),

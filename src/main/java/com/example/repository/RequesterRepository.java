@@ -14,8 +14,7 @@ public interface RequesterRepository extends PageableRepository<Requester, Long>
 
     @Query(value = """
         SELECT * FROM requester 
-        WHERE (:id IS NULL OR id = :id)
-        AND (:fullName IS NULL OR full_name LIKE CONCAT('%', :fullName, '%'))
+        WHERE (:fullName IS NULL OR full_name LIKE CONCAT('%', :fullName, '%'))
         AND (:email IS NULL OR email LIKE CONCAT('%', :email, '%'))
         AND (:department IS NULL OR department LIKE CONCAT('%', :department, '%'))
         AND (:userName IS NULL OR user_name LIKE CONCAT('%', :userName, '%'))
@@ -23,15 +22,13 @@ public interface RequesterRepository extends PageableRepository<Requester, Long>
         """,
         countQuery = """
         SELECT COUNT(*) FROM requester 
-        WHERE (:id IS NULL OR id = :id)
-        AND (:fullName IS NULL OR full_name LIKE CONCAT('%', :fullName, '%'))
+        WHERE (:fullName IS NULL OR full_name LIKE CONCAT('%', :fullName, '%'))
         AND (:email IS NULL OR email LIKE CONCAT('%', :email, '%'))
         AND (:department IS NULL OR department LIKE CONCAT('%', :department, '%'))
         AND (:userName IS NULL OR user_name LIKE CONCAT('%', :userName, '%'))
         AND (:phoneNumber IS NULL OR phone_number LIKE CONCAT('%', :phoneNumber, '%'))
         """)
     Page<Requester> findWithFilters(
-        @Nullable Long id,
         @Nullable String fullName,
         @Nullable String email,
         @Nullable String department,

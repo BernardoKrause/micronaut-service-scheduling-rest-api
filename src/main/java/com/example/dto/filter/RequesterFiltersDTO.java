@@ -7,10 +7,6 @@ import io.micronaut.http.annotation.QueryValue;
 public class RequesterFiltersDTO implements Pageable {
     @Nullable
     @QueryValue
-    private Long id;
-    
-    @Nullable
-    @QueryValue
     private String fullName;
     
     @Nullable
@@ -40,8 +36,7 @@ public class RequesterFiltersDTO implements Pageable {
     public RequesterFiltersDTO() {
     }
 
-    public RequesterFiltersDTO(Long id, String fullName, String email, String department, String userName, String phoneNumber, Integer size, Integer page) {
-        this.id = id;
+    public RequesterFiltersDTO(String fullName, String email, String department, String userName, String phoneNumber, Integer size, Integer page) {
         this.fullName = fullName;
         this.email = email;
         this.department = department;
@@ -53,10 +48,6 @@ public class RequesterFiltersDTO implements Pageable {
 
     public String getFullName() {
         return fullName;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getEmail() {
@@ -73,10 +64,6 @@ public class RequesterFiltersDTO implements Pageable {
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setFullName(String fullName) {
