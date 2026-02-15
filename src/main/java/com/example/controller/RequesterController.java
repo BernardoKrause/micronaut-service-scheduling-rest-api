@@ -2,7 +2,9 @@ package com.example.controller;
 
 import com.example.dto.filter.RequesterFiltersDTO;
 import com.example.entity.Requester;
+import com.example.entity.Service;
 import com.example.facade.RequesterFacade;
+import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.*;
@@ -53,5 +55,13 @@ public class RequesterController {
         return requesterFacade.delete(id)
                 .map(HttpResponse::ok)
                 .orElse(HttpResponse.notFound());
+    }
+
+    @Secured(SecurityRule.IS_ANONYMOUS)
+    @Get("/{id}/services")
+    public HttpResponse<Page<Service>> listServicesByRequester(Long id, Pageable pageable) throws Exception {
+        return requesterFacade.listServicesByRequester(id, pageable)
+            .map(HttpResponse::ok)
+            .orElse(HttpResponse.notFound());
     }
 }

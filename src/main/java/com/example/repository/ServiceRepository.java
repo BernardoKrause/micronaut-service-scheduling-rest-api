@@ -10,6 +10,7 @@ import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.PageableRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @JdbcRepository(dialect = Dialect.MYSQL)
@@ -43,4 +44,15 @@ public interface ServiceRepository extends PageableRepository<Service, Long> {
         @Nullable LocalDate openedAt,
         Pageable pageable
     );
+
+    @Query(value = """
+        SELECT * FROM service 
+        WHERE requester_id = :id
+        """,
+        countQuery = """
+        SELECT COUNT(*) FROM service
+        WHERE requester_id = :id
+    """
+    )
+    Page<Service> findByRequesterId(Long id, Pageable pageable);
 }

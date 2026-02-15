@@ -1,7 +1,9 @@
 package com.example;
 
 import com.example.entity.Requester;
+import com.example.entity.Service;
 import com.example.repository.RequesterRepository;
+import com.example.repository.ServiceRepository;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.core.type.Argument;
 import io.micronaut.data.model.Page;
@@ -34,11 +36,15 @@ public class RequesterControllerTest {
     @Inject
     RequesterRepository requesterRepository;
 
+    @Inject
+    ServiceRepository serviceRepository;
+
     private Requester mockRequester;
 
     @BeforeEach
     void setup() {
         reset(requesterRepository);
+        reset(serviceRepository);
 
         mockRequester = new Requester();
         mockRequester.setId(1L);
@@ -62,6 +68,12 @@ public class RequesterControllerTest {
     @Replaces(RequesterRepository.class)
     RequesterRepository requesterRepository() {
         return mock(RequesterRepository.class);
+    }
+
+    @MockBean(ServiceRepository.class)
+    @Replaces(ServiceRepository.class)
+    ServiceRepository serviceRepository() {
+        return mock(ServiceRepository.class);
     }
 
     @Test
@@ -170,5 +182,38 @@ public class RequesterControllerTest {
         assertEquals(HttpStatus.OK, response.getStatus());
 
         verify(requesterRepository, atLeastOnce()).delete(any(Requester.class));
+    }
+
+    @Test
+    void testGetServicesByRequester() {
+        Service mockService = new Service();
+        mockService.setId(1L);
+        mockService.setDescription("Test Service");
+        mockService.setType("Manutenção");
+        mockService.setValue(100.0);
+        mockService.setRequester(mockRequester);
+
+        Page<Service> servicePage = Page.of(List.of(mockService), Pageable.from(0, 10), 1L);
+        when(requesterRepository.findById(1L)).thenReturn(Optional.of(mockRequester));
+        when(serviceRepository.findByRequesterId(eq(1L), any(Pageable.class))).thenReturn(servicePage);
+
+        Argument<Map<String, Object>> pageArgument = Argument.mapOf(String.class, Object.class);
+
+        HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
+                HttpRequest.GET("/requesters/1/services?page=0&size=10"), pageArgument
+        );
+
+        assertEquals(HttpStatus.OK, response.getStatus());
+
+        Map<String, Object> body = response.body();
+        assertNotNull(body);
+
+        List<Map<String, Object>> content = (List<Map<String, Object>>) body.get("content");
+        assertNotNull(content);
+        assertFalse(content.isEmpty());
+
+        Map<String, Object> firstService = content.get(0);
+        assertEquals("Test Service", firstService.get("description"));
+        assertEquals("Manutenção", firstService.get("type"));
     }
 }
