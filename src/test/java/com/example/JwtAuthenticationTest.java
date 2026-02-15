@@ -1,5 +1,6 @@
 package com.example;
 
+import io.micronaut.context.annotation.Property;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @MicronautTest
+@Property(name = "micronaut.security.enabled", value = "true")
 public class JwtAuthenticationTest {
 
     @Inject
@@ -25,7 +27,8 @@ public class JwtAuthenticationTest {
 
     @Test
     void testLoginAndAccessSecuredEndpoint() {
-        UsernamePasswordCredentials creds = new UsernamePasswordCredentials("usuario", "senha123");
+        UsernamePasswordCredentials creds = new UsernamePasswordCredentials("admin", "admin");
+
         HttpRequest<?> request = HttpRequest.POST("/login", creds);
 
         HttpResponse<BearerAccessRefreshToken> response = client.toBlocking().exchange(request, BearerAccessRefreshToken.class);
@@ -49,7 +52,6 @@ public class JwtAuthenticationTest {
             client.toBlocking().exchange(HttpRequest.GET("/api/status"));
         });
 
-        // Verify it's actually an Unauthorized (401) error
         assertEquals(HttpStatus.UNAUTHORIZED, thrown.getStatus());
     }
 }

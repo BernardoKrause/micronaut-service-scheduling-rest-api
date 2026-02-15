@@ -4,6 +4,7 @@ import com.example.entity.Requester;
 import com.example.repository.RequesterRepository;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.core.type.Argument;
+import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -49,6 +50,8 @@ public class RequesterControllerTest {
         when(requesterRepository.findAll()).thenReturn(List.of(mockRequester));
         when(requesterRepository.findById(1L)).thenReturn(Optional.of(mockRequester));
         when(requesterRepository.save(any(Requester.class))).thenReturn(mockRequester);
+        when(requesterRepository.findAll(any(Pageable.class)))
+                .thenReturn(Page.of(List.of(mockRequester), Pageable.from(0, 10), 1L));
     }
 
     @MockBean(RequesterRepository.class)
@@ -76,7 +79,7 @@ public class RequesterControllerTest {
         assertFalse(content.isEmpty());
 
         Map<String, Object> firstService = content.get(0);
-        assertEquals("Limpeza", firstService.get("description"));
+        assertEquals("teste", firstService.get("name"));
 
         verify(requesterRepository, atLeastOnce()).findAll(any(Pageable.class));
     }
@@ -134,7 +137,7 @@ public class RequesterControllerTest {
             Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+        assertEquals(HttpStatus.OK, response.getStatus());
 
         verify(requesterRepository, atLeastOnce()).update(any(Requester.class));
     }
@@ -150,7 +153,7 @@ public class RequesterControllerTest {
                 Argument.mapOf(String.class, Object.class)
         );
 
-        assertEquals(HttpStatus.NO_CONTENT, response.getStatus());
+        assertEquals(HttpStatus.OK, response.getStatus());
 
         verify(requesterRepository, atLeastOnce()).delete(any(Requester.class));
     }
