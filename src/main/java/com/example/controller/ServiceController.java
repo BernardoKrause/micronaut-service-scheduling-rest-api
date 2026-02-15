@@ -1,9 +1,12 @@
 package com.example.controller;
 
 import com.example.dto.ServiceDTO;
+import com.example.entity.Service;
+import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import com.example.facade.ServiceFacade;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
@@ -22,26 +25,16 @@ public class ServiceController {
 
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Get
-    public HttpResponse<Object> listServices(@Valid Pageable pageable) {
-        try {
-            return HttpResponse.ok(serviceFacade.list(pageable));
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Object> listServices(@Valid Pageable pageable) throws Exception {
+        return HttpResponse.ok(serviceFacade.list(pageable));
     }
 
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Get("/{id}")
-    public HttpResponse<Object> getServiceById(Long id) {
-        try {
-            return HttpResponse.ok(serviceFacade.get(id).get());
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Service> getServiceById(Long id) throws Exception {
+        return serviceFacade.get(id)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.notFound());
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -52,27 +45,17 @@ public class ServiceController {
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
     @Patch("/{id}")
-    public HttpResponse<Object> updateService(Long id, @Body @Valid ServiceDTO service) {
-        try {
-            serviceFacade.update(id, service);
-            return HttpResponse.noContent();
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Service> patchService(@PathVariable Long id, @Body ServiceDTO service) throws Exception {
+        return serviceFacade.update(id, service)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.notFound());
     }
 
     @Secured(SecurityRule.IS_AUTHENTICATED)
     @Delete("/{id}")
-    public HttpResponse<Object> deleteService(Long id) {
-        try {
-            serviceFacade.delete(id);
-            return HttpResponse.noContent();
-        } catch (ServiceNotFoundException e) {
-            return HttpResponse.notFound(e.getMessage());
-        } catch (Exception e) {
-            return HttpResponse.serverError(e.getMessage());
-        }
+    public HttpResponse<Service> deleteService(@PathVariable Long id) throws Exception {
+        return serviceFacade.delete(id)
+                .map(HttpResponse::ok)
+                .orElse(HttpResponse.notFound());
     }
 }
