@@ -6,7 +6,7 @@ import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.PageableRepository;
 
 
-@JdbcRepository(dialect = Dialect.POSTGRES)
+@JdbcRepository(dialect = Dialect.MYSQL)
 public interface ServiceRepository extends PageableRepository<Service, Long> {
     // Exemplo de criação de métodos customizado
     // @Query("SELECT * FROM service WHERE description = :description")
