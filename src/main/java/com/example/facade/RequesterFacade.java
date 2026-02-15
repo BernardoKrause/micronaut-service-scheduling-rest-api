@@ -52,12 +52,24 @@ public class RequesterFacade {
 
         Requester existingService = existingRequester.get();
 
-        if (modifiedRequester.getName() != null) {
-            existingService.setName(modifiedRequester.getName());
+        if (modifiedRequester.getFullName() != null) {
+            existingService.setName(modifiedRequester.getFullName());
         }
 
         if (modifiedRequester.getEmail() != null) {
             existingService.setEmail(modifiedRequester.getEmail());
+        }
+
+        if (modifiedRequester.getDepartment() != null) {
+            existingService.setDepartment(modifiedRequester.getDepartment());
+        }
+
+        if( modifiedRequester.getUserName() != null) {
+            existingService.setUserName(modifiedRequester.getUserName());
+        }
+
+        if (modifiedRequester.getPhoneNumber() != null) {
+            existingService.setPhoneNumber(modifiedRequester.getPhoneNumber());
         }
 
         return Optional.of(requesterRepository.update(existingService));
