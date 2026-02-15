@@ -1,6 +1,7 @@
 package com.example.facade;
 
 import com.example.dto.ServiceDTO;
+import com.example.dto.filter.ServiceFiltersDTO;
 import com.example.entity.Requester;
 import com.example.entity.Service;
 import com.example.repository.RequesterRepository;
@@ -27,8 +28,15 @@ public class ServiceFacade {
 		this.requesterRepository = requesterRepository;
 	}
 
-	public Page<Service> list(Pageable pageable) throws Exception{
-		return serviceRepository.findAll(pageable);
+	public Page<Service> list(ServiceFiltersDTO pageable) throws Exception{
+		return serviceRepository.FindWithFilters(
+            pageable.getDescription(),
+            pageable.getType(),
+            pageable.getValue(),
+            pageable.getScheduledFor(),
+            pageable.getOpenedAt(),
+            pageable
+        );
 	}
 
 	public Optional<Service> get(Long id) throws Exception {

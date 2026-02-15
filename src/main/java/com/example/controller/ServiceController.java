@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.ServiceDTO;
+import com.example.dto.filter.ServiceFiltersDTO;
 import com.example.entity.Service;
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
@@ -25,7 +26,7 @@ public class ServiceController {
 
     @Secured(SecurityRule.IS_ANONYMOUS)
     @Get
-    public HttpResponse<Object> listServices(@Valid Pageable pageable) throws Exception {
+    public HttpResponse<Object> listServices(@Valid ServiceFiltersDTO pageable) throws Exception {
         return HttpResponse.ok(serviceFacade.list(pageable));
     }
 
