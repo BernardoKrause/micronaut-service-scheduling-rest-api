@@ -53,7 +53,7 @@ public class RequesterFacade {
         Requester existingService = existingRequester.get();
 
         if (modifiedRequester.getFullName() != null) {
-            existingService.setName(modifiedRequester.getFullName());
+            existingService.setFullName(modifiedRequester.getFullName());
         }
 
         if (modifiedRequester.getEmail() != null) {

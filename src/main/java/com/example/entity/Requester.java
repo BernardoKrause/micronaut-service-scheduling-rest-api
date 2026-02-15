@@ -93,7 +93,7 @@ public class Requester {
         this.id = id;
     }
 
-    public void setName(String name) {
+    public void setFullName(String name) {
         this.fullName = name;
     }
 

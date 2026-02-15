@@ -17,7 +17,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +42,11 @@ public class RequesterControllerTest {
 
         mockRequester = new Requester();
         mockRequester.setId(1L);
-        mockRequester.setName("teste");
+        mockRequester.setFullName("teste");
         mockRequester.setEmail("teste@teste.com");
+        mockRequester.setDepartment("TI");
+        mockRequester.setUserName("teste_user");
+        mockRequester.setPhoneNumber("123456789");
 
         when(requesterRepository.findById(1L)).thenReturn(Optional.of(mockRequester));
         when(requesterRepository.findAll()).thenReturn(List.of(mockRequester));
@@ -78,8 +80,8 @@ public class RequesterControllerTest {
         assertNotNull(content);
         assertFalse(content.isEmpty());
 
-        Map<String, Object> firstService = content.get(0);
-        assertEquals("teste", firstService.get("name"));
+        Map<String, Object> firstRequester = content.get(0);
+        assertEquals("teste", firstRequester.get("fullName"));
 
         verify(requesterRepository, atLeastOnce()).findAll(any(Pageable.class));
     }
@@ -97,7 +99,7 @@ public class RequesterControllerTest {
         Map<String, Object> body = response.body();
 
         assertNotNull(body);
-        assertEquals("teste", body.get("name"));
+        assertEquals("teste", body.get("fullName"));
         assertEquals("teste@teste.com", body.get("email"));
 
         verify(requesterRepository, atLeastOnce()).findById(1L);
@@ -105,35 +107,44 @@ public class RequesterControllerTest {
 
     @Test
     void testPostRequester() {
-        List<Map<String, Object>> newRequester = List.of(Map.of(
-                "name", "teste",
-                "email", "teste@teste.com"
-        ));
+        Requester newRequester = new Requester();
+        newRequester.setFullName("teste");
+        newRequester.setEmail("teste@teste.com");
+        newRequester.setDepartment("TI");
+        newRequester.setUserName("teste_user");
+        newRequester.setPhoneNumber("123456789");
 
         when(requesterRepository.saveAll(anyList())).thenReturn(List.of(mockRequester));
 
-        HttpResponse <List<Map<String, Object>>> response = client.toBlocking().exchange(
-                HttpRequest.POST("/requesters", newRequester),
-                Argument.listOf(Argument.mapOf(String.class, Object.class))
-        );
+        try {
+            HttpResponse<List<Requester>> response = client.toBlocking().exchange(
+                    HttpRequest.POST("/requesters", List.of(newRequester))
+                            .basicAuth("admin", "admin"),
+                    Argument.listOf(Requester.class)
+            );
 
-        assertEquals(HttpStatus.CREATED, response.getStatus());
-        assertNotNull(response.body());
-        assertEquals("teste", response.body().get(0).get("name"));
+            assertEquals(HttpStatus.CREATED, response.getStatus());
+            assertNotNull(response.body());
+            assertEquals("teste", response.body().get(0).getFullName());
+        } catch (io.micronaut.http.client.exceptions.HttpClientResponseException e) {
+            System.out.println("Error response: " + e.getResponse().getBody(String.class).orElse("No body"));
+            throw e;
+        }
     }
 
     @Test
     void testPatchRequester() {
         Requester updatedRequester = mockRequester;
-        updatedRequester.setName("teste1");
+        updatedRequester.setFullName("teste1");
 
         when(requesterRepository.findById(1L)).thenReturn(Optional.of(mockRequester));
         when(requesterRepository.update(any(Requester.class))).thenReturn(updatedRequester);
 
-        Map<String, Object> updateData = Map.of("name", "teste1");
+        Map<String, Object> updateData = Map.of("fullName", "teste1");
 
         HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
-            HttpRequest.PATCH("/requesters/1", updateData),
+            HttpRequest.PATCH("/requesters/1", updateData)
+                    .basicAuth("admin", "admin"),
             Argument.mapOf(String.class, Object.class)
         );
 
@@ -149,7 +160,8 @@ public class RequesterControllerTest {
         doNothing().when(requesterRepository).delete(any(Requester.class));
 
         HttpResponse<Map<String, Object>> response = client.toBlocking().exchange(
-                HttpRequest.DELETE("/requesters/1"),
+                HttpRequest.DELETE("/requesters/1")
+                        .basicAuth("admin", "admin"),
                 Argument.mapOf(String.class, Object.class)
         );
 

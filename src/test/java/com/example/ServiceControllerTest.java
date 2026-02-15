@@ -51,8 +51,11 @@ public class ServiceControllerTest {
         // 1. Criar e salvar um Requester real no H2 para satisfazer a FK
         Requester requester = new Requester();
         requester.setId(1L);
-        requester.setName("Cliente Teste");
+        requester.setFullName("Cliente Teste");
         requester.setEmail("cliente@teste.com");
+        requester.setDepartment("TI");
+        requester.setUserName("cliente_teste");
+        requester.setPhoneNumber("123456789");
         requesterRepository.save(requester);
 
         mockService = new Service();
