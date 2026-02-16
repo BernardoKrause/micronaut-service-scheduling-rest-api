@@ -86,6 +86,7 @@ Endpoints públicos (sem autenticação):
 - `GET /requesters/{id}`
 - `GET /services`
 - `GET /services/{id}`
+- `GET /requesters/{id}/services`
 
 Endpoints protegidos (requerem autenticação JWT):
 - Todos os métodos `POST`, `PATCH` e `DELETE`
