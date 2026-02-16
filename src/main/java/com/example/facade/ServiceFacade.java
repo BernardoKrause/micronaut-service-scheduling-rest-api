@@ -7,7 +7,6 @@ import com.example.entity.Service;
 import com.example.repository.RequesterRepository;
 import com.example.repository.ServiceRepository;
 import io.micronaut.data.model.Page;
-import io.micronaut.data.model.Pageable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import javax.management.ServiceNotFoundException;
@@ -55,18 +54,18 @@ public class ServiceFacade {
         List<Service> listServices = new ArrayList<>();
 
         for(ServiceDTO dto : dtos){
-            requester = requesterRepository.findById(dto.getRequester_id());
+            requester = requesterRepository.findById(dto.getRequesterId());
 
             if(requester.isEmpty()) {
-                throw new ServiceNotFoundException("Requester not found: " + dto.getRequester_id());
+                throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
             }
 
             service = new Service();
             service.setDescription(dto.getDescription());
             service.setType(dto.getType());
             service.setValue(dto.getValue());
-            service.setScheduled_for(dto.getScheduled_for());
-            service.setOpened_at(dto.getOpened_at());
+            service.setScheduledFor(dto.getScheduled_for());
+            service.setOpenedAt(dto.getOpenedAt());
             service.setRequester(requester.get());
             listServices.add(service);
         }
@@ -96,18 +95,18 @@ public class ServiceFacade {
         }
 
         if(dto.getScheduled_for() != null) {
-            existingService.setScheduled_for(dto.getScheduled_for());
+            existingService.setScheduledFor(dto.getScheduled_for());
         }
 
-        if(dto.getOpened_at() != null) {
-            existingService.setOpened_at(dto.getOpened_at());
+        if(dto.getOpenedAt() != null) {
+            existingService.setOpenedAt(dto.getOpenedAt());
         }
 
-        if(dto.getRequester_id() != null) {
-            Optional<Requester> requester = requesterRepository.findById(dto.getRequester_id());
+        if(dto.getRequesterId() != null) {
+            Optional<Requester> requester = requesterRepository.findById(dto.getRequesterId());
 
             if(requester.isEmpty()) {
-                throw new ServiceNotFoundException("Requester not found: " + dto.getRequester_id());
+                throw new ServiceNotFoundException("Requester not found: " + dto.getRequesterId());
             }
 
             existingService.setRequester(requester.get());
