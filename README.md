@@ -114,8 +114,8 @@ Endpoints protegidos (requerem autenticação JWT):
   "description": "Manutenção de servidor",
   "type": "Técnico",
   "value": 500.00,
-  "scheduled_for": "2026-02-20",
-  "opened_at": "2026-02-15",
+  "scheduledFor": "2026-02-20",
+  "openedAt": "2026-02-15",
   "requester": {
     "id": 1,
     "fullName": "João Silva"
