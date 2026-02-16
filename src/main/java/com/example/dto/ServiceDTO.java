@@ -1,7 +1,6 @@
 package com.example.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.validation.constraints.NotBlank;
@@ -24,25 +23,24 @@ public class ServiceDTO {
     private Double value;
 
     @NotNull(message = "Date of Schedule is required!")
-    private LocalDate scheduled_for;
+    private LocalDate scheduledFor;
 
     @NotNull(message = "Opening date is required")
-    private LocalDate opened_at;
+    private LocalDate openedAt;
 
     @NotNull(message = "Requester is required!")
-    @JsonProperty("requester_id")
-    private Long requester_id;
+    private Long requesterId;
 
     public ServiceDTO() {
     }
 
-    public ServiceDTO(String description, String type, Double value, LocalDate scheduled_for, LocalDate opened_at, Long requester_id) {
+    public ServiceDTO(String description, String type, Double value, LocalDate scheduledFor, LocalDate openedAt, Long requesterId) {
         this.description = description;
         this.type = type;
         this.value = value;
-        this.scheduled_for = scheduled_for;
-        this.opened_at = opened_at;
-        this.requester_id = requester_id;
+        this.scheduledFor = scheduledFor;
+        this.openedAt = openedAt;
+        this.requesterId = requesterId;
     }
 
     public String getDescription() {
@@ -58,15 +56,15 @@ public class ServiceDTO {
     }
 
     public LocalDate getScheduled_for() {
-        return scheduled_for;
+        return scheduledFor;
     }
 
-    public LocalDate getOpened_at() {
-        return opened_at;
+    public LocalDate getOpenedAt() {
+        return openedAt;
     }
 
-    public Long getRequester_id() {
-        return requester_id;
+    public Long getRequesterId() {
+        return requesterId;
     }
 
     public void setDescription(String description) {
@@ -81,16 +79,16 @@ public class ServiceDTO {
         this.value = value;
     }
 
-    public void setScheduled_for(LocalDate scheduled_for) {
-        this.scheduled_for = scheduled_for;
+    public void setScheduledFor(LocalDate scheduled_for) {
+        this.scheduledFor = scheduled_for;
     }
 
-    public void setOpened_at(LocalDate opened_at) {
-        this.opened_at = opened_at;
+    public void setOpenedAt(LocalDate opened_at) {
+        this.openedAt = opened_at;
     }
 
-    public void setRequester_id(Long requester_id) {
-        this.requester_id = requester_id;
+    public void setRequesterId(Long requesterId) {
+        this.requesterId = requesterId;
     }
 }
 

@@ -63,8 +63,8 @@ public class ServiceControllerTest {
         mockService.setDescription("Limpeza");
         mockService.setType("Geral");
         mockService.setValue(150.0);
-        mockService.setOpened_at(LocalDate.now());
-        mockService.setScheduled_for(LocalDate.now());
+        mockService.setOpenedAt(LocalDate.now());
+        mockService.setScheduledFor(LocalDate.now());
 
         when(serviceRepository.findAll(any(Pageable.class)))
                 .thenReturn(Page.of(List.of(mockService), Pageable.from(0, 10), 1L));
@@ -132,9 +132,9 @@ public class ServiceControllerTest {
                 "description", "Limpeza",
                 "type", "Geral",
                 "value", 150.0,
-                "opened_at", "2026-01-20",
-                "scheduled_for", "2026-01-23",
-                "requester_id", 1L
+                "openedAt", "2026-01-20",
+                "scheduledFor", "2026-01-23",
+                "requesterId", 1L
         ));
 
         when(serviceRepository.saveAll(anyList())).thenReturn(List.of(mockService));
