@@ -56,15 +56,16 @@ Executar todos os testes:
 
 ### Requesters (Solicitantes)
 
-- `GET /requesters` - Listar todos os solicitantes (paginado)
+- `GET /requesters` - Listar todos os solicitantes (paginado com filtros)
 - `GET /requesters/{id}` - Buscar solicitante por ID
+- `GET /requesters/{id}/services` - Listar serviços de um solicitante
 - `POST /requesters` - Criar novo solicitante (requer autenticação)
 - `PATCH /requesters/{id}` - Atualizar solicitante (requer autenticação)
 - `DELETE /requesters/{id}` - Remover solicitante (requer autenticação)
 
 ### Services (Serviços)
 
-- `GET /services` - Listar todos os serviços (paginado)
+- `GET /services` - Listar todos os serviços (paginado com filtros)
 - `GET /services/{id}` - Buscar serviço por ID
 - `POST /services` - Criar novo serviço (requer autenticação)
 - `PATCH /services/{id}` - Atualizar serviço (requer autenticação)
@@ -72,10 +73,13 @@ Executar todos os testes:
 
 ## 🔐 Autenticação
 
-A API usa Basic Authentication. Credenciais padrão:
+A API usa JWT (JSON Web Tokens) para autenticação. Para acessar endpoints protegidos:
 
-- **Usuário**: `usuario`
-- **Senha**: `senha123`
+1. Faça login no endpoint `/login` com as credenciais:
+   - **Usuário**: `usuario`
+   - **Senha**: `senha123`
+
+2. Use o token JWT retornado no header `Authorization: Bearer <token>`
 
 Endpoints públicos (sem autenticação):
 - `GET /requesters`
@@ -83,7 +87,7 @@ Endpoints públicos (sem autenticação):
 - `GET /services`
 - `GET /services/{id}`
 
-Endpoints protegidos (requerem autenticação):
+Endpoints protegidos (requerem autenticação JWT):
 - Todos os métodos `POST`, `PATCH` e `DELETE`
 
 ## 📊 Modelo de Dados
@@ -126,14 +130,15 @@ As configurações do banco de dados estão em `src/main/resources/application.p
 datasources.default.url=jdbc:mysql://localhost:3306/service_db?allowPublicKeyRetrieval=true&useSSL=false
 datasources.default.username=root
 datasources.default.password=trabalhoSD
-datasources.default.schema-generate=CREATE_DROP
+datasources.default.schema-generate=CREATE
 ```
 
 ## 📝 Notas
 
-- `schema-generate=CREATE_DROP`: As tabelas são recriadas a cada reinício (útil para desenvolvimento)
+- `schema-generate=CREATE`: As tabelas são criadas se não existirem (dados são mantidos entre reinícios)
 - Para produção, use `schema-generate=NONE` e gerencie o schema manualmente
 - O relacionamento entre Service e Requester é configurado via foreign key no banco
+- A API usa JWT para autenticação com tokens de acesso que expiram em 30 minutos
 
 ## 🤝 Contribuindo
 
