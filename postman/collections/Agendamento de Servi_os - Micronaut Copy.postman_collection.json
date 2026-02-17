@@ -1,0 +1,1167 @@
+{
+  "info": {
+    "_postman_id": "2d04a71f-b6f1-4f85-9f73-443fd3281e19",
+    "name": "Agendamento de Serviços - Micronaut Copy",
+    "description": "Nos métodos PATCH, estamos seguindo o padrão do **Jackson** (que o Micronaut utiliza por baixo dos panos) é ser \"silencioso\" em relação a campos que ele não conhece.\n\nIsso acontece por uma filosofia de design: se o cliente (Postman ou Frontend) envia dados extras que o servidor não precisa, o servidor simplesmente ignora o que sobra e processa apenas o que ele entende.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Services",
+      "item": [
+        {
+          "name": "Services",
+          "id": "f83098be-df43-4af6-875d-83719addc4fb",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/services",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1117c783-d022-49db-b370-69d928baa8ea",
+              "name": "Services",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/services",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:07:20 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "222"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"content\": [\n        {\n            \"id\": 1,\n            \"description\": \"teste5\",\n            \"type\": \"teste6\",\n            \"value\": 150,\n            \"scheduledFor\": \"2026-01-20\",\n            \"openedAt\": \"2026-01-14\",\n            \"requester\": {\n                \"id\": 1\n            }\n        }\n    ],\n    \"pageable\": {\n        \"size\": 10,\n        \"number\": 0,\n        \"sort\": {},\n        \"mode\": \"OFFSET\"\n    },\n    \"totalSize\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Services Paginated",
+          "id": "9645c532-949f-4464-8641-d5fe0ee36341",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/services?size=1&page=0&description=teste5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "1"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "description",
+                  "value": "teste5"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2b539d21-edea-48c2-aeb5-ed406dd791d2",
+              "name": "Services Paginated",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/services?size=1&page=0&description=teste5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "services"
+                  ],
+                  "query": [
+                    {
+                      "key": "size",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "description",
+                      "value": "teste5"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 12:25:09 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "221"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"content\": [\n        {\n            \"id\": 1,\n            \"description\": \"teste5\",\n            \"type\": \"teste6\",\n            \"value\": 150,\n            \"scheduledFor\": \"2026-01-20\",\n            \"openedAt\": \"2026-01-14\",\n            \"requester\": {\n                \"id\": 1\n            }\n        }\n    ],\n    \"pageable\": {\n        \"size\": 1,\n        \"number\": 0,\n        \"sort\": {},\n        \"mode\": \"OFFSET\"\n    },\n    \"totalSize\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Service",
+          "id": "a1c12384-db14-4867-b3b7-54d3673fcf9b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/services/{{service_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "{{service_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9812018c-3c49-48ff-9104-6a93f28c3d25",
+              "name": "Service",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/services/{{service_id}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "services",
+                    "{{service_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:08:08 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "134"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"description\": \"teste5\",\n    \"type\": \"teste6\",\n    \"value\": 150,\n    \"scheduledFor\": \"2026-01-20\",\n    \"openedAt\": \"2026-01-14\",\n    \"requester\": {\n        \"id\": 1\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Services",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "678b9e8d-4323-49a7-b716-6a6cd05f7063"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"service_id\", resposta[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "56efa549-5665-4819-9321-ae4513233cf9"
+              }
+            }
+          ],
+          "id": "ac02a00d-3f9a-4ee9-a09f-e9eb6718ae2a",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    {\r\n        \"description\": \"teste5\",\r\n        \"type\": \"teste6\",\r\n        \"value\": 150.0,\r\n        \"openedAt\": \"2026-01-14\",\r\n        \"scheduledFor\": \"2026-01-20\",\r\n        \"requesterId\": {{requester_id}}\r\n    }\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "923c7375-e665-44b4-9e3c-f5dc2f5c9e66",
+              "name": "Services",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n    {\r\n        \"description\": \"teste5\",\r\n        \"type\": \"teste6\",\r\n        \"value\": 150.0,\r\n        \"openedAt\": \"2026-01-14\",\r\n        \"scheduledFor\": \"2026-01-20\",\r\n        \"requesterId\": {{requester_id}}\r\n    }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/services",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "services"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:00:52 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "251"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": 1,\n        \"description\": \"teste5\",\n        \"type\": \"teste6\",\n        \"value\": 150,\n        \"scheduledFor\": \"2026-01-20\",\n        \"openedAt\": \"2026-01-14\",\n        \"requester\": {\n            \"id\": 1,\n            \"fullName\": \"Roger That\",\n            \"email\": \"roger@gmail.com\",\n            \"department\": \"TI\",\n            \"userName\": \"Roger\",\n            \"phoneNumber\": \"99999999999\"\n        }\n    }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Service",
+          "id": "ce08752b-cf06-4ba4-86da-b8383e61e6b4",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"description\": \"nova descrição\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/{{service_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "{{service_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dd47b849-fb76-4a23-bf28-e74dcfe6aff3",
+              "name": "Service",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"description\": \"nova descrição\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/services/{{service_id}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "services",
+                    "{{service_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:10:59 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "144"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"description\": \"nova descrição\",\n    \"type\": \"teste6\",\n    \"value\": 150,\n    \"scheduledFor\": \"2026-01-20\",\n    \"openedAt\": \"2026-01-14\",\n    \"requester\": {\n        \"id\": 1\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Service",
+          "id": "768f237e-0ba6-447f-86e5-6e60c16c111c",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/services/{{service_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "{{service_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b8f2cbc3-7ccb-45dd-85ab-3c4073c0ffef",
+              "name": "Service",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/services/{{service_id}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "services",
+                    "{{service_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:11:40 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "144"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"description\": \"nova descrição\",\n    \"type\": \"teste6\",\n    \"value\": 150,\n    \"scheduledFor\": \"2026-01-20\",\n    \"openedAt\": \"2026-01-14\",\n    \"requester\": {\n        \"id\": 1\n    }\n}"
+            }
+          ]
+        }
+      ],
+      "id": "91d5e4eb-63d2-40e6-8729-a82b38b4a5f0"
+    },
+    {
+      "name": "Requesters",
+      "item": [
+        {
+          "name": "Requesters",
+          "id": "812e5eff-d927-4f9c-a3d5-c2b09f4a2f7a",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/requesters",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7a13c068-451b-4f94-80c3-301ab544af16",
+              "name": "Requesters",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/requesters",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Sun, 15 Feb 2026 12:24:56 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "144"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"content\": [\n        {\n            \"id\": 1,\n            \"name\": \"bernardo\",\n            \"email\": \"bernardo@gmail.com\"\n        }\n    ],\n    \"pageable\": {\n        \"size\": 100,\n        \"number\": 0,\n        \"sort\": {},\n        \"mode\": \"OFFSET\"\n    },\n    \"totalSize\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Requesters Paginated",
+          "id": "c386c699-bb48-4720-85a3-5aac49109545",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/requesters?size=1&page=0&fullName=Roger That",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters"
+              ],
+              "query": [
+                {
+                  "key": "size",
+                  "value": "1"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "fullName",
+                  "value": "Roger That"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "81f369fd-f74a-418f-a6c7-ab5bf2a0db6d",
+              "name": "Requesters Paginated",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/requesters?size=1&page=0&fullName=Roger That",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters"
+                  ],
+                  "query": [
+                    {
+                      "key": "size",
+                      "value": "1"
+                    },
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "fullName",
+                      "value": "Roger That"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:14:07 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "210"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"content\": [\n        {\n            \"id\": 1,\n            \"fullName\": \"Roger That\",\n            \"email\": \"roger@gmail.com\",\n            \"department\": \"TI\",\n            \"userName\": \"Roger\",\n            \"phoneNumber\": \"99999999999\"\n        }\n    ],\n    \"pageable\": {\n        \"size\": 1,\n        \"number\": 0,\n        \"sort\": {},\n        \"mode\": \"OFFSET\"\n    },\n    \"totalSize\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Requester",
+          "id": "7de4092d-b15d-4be6-9c9d-741c592c7af3",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/requesters/{{requester_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters",
+                "{{requester_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6851c1cf-938b-45b9-8318-82dfe2405409",
+              "name": "Requester",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/requesters/{{requester_id}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters",
+                    "{{requester_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 12:24:47 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "123"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"fullName\": \"Roger That\",\n    \"email\": \"roger@gmail.com\",\n    \"department\": \"TI\",\n    \"userName\": \"Roger\",\n    \"phoneNumber\": \"99999999999\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Services from a Requester",
+          "id": "cf737709-a2ec-45a4-9689-7e2f935d29ab",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/requesters/{{requester_id}}/services",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters",
+                "{{requester_id}}",
+                "services"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "41673424-8a74-4e56-a02c-9690f0b7a004",
+              "name": "Services from a Requester",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/requesters/{{requester_id}}/services",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters",
+                    "{{requester_id}}",
+                    "services"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 01:01:04 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "223"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"content\": [\n        {\n            \"id\": 1,\n            \"description\": \"teste5\",\n            \"type\": \"teste6\",\n            \"value\": 150,\n            \"scheduledFor\": \"2026-01-20\",\n            \"openedAt\": \"2026-01-14\",\n            \"requester\": {\n                \"id\": 1\n            }\n        }\n    ],\n    \"pageable\": {\n        \"size\": 100,\n        \"number\": 0,\n        \"sort\": {},\n        \"mode\": \"OFFSET\"\n    },\n    \"totalSize\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Requesters",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "38559261-ea4d-428d-8758-75943425653b"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const resposta = pm.response.json();\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"requester_id\", resposta[0].id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "7ad37047-5d12-495f-8edd-fab73437c4dd"
+              }
+            }
+          ],
+          "id": "ed888d09-564f-430c-8670-9a5f2a3dca61",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    {\r\n        \"userName\": \"Roger\",\r\n        \"email\": \"roger@gmail.com\",\r\n        \"fullName\": \"Roger That\",\r\n        \"department\": \"TI\",\r\n        \"phoneNumber\": \"99999999999\"\r\n    }\r\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/requesters",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cbd2da57-e9a1-447f-a763-3222f85b9874",
+              "name": "Requesters",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n    {\r\n        \"userName\": \"Roger\",\r\n        \"email\": \"roger@gmail.com\",\r\n        \"fullName\": \"Roger That\",\r\n        \"department\": \"TI\",\r\n        \"phoneNumber\": \"99999999999\"\r\n    }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/requesters",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 00:52:07 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "125"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n    {\n        \"id\": 1,\n        \"fullName\": \"Roger That\",\n        \"email\": \"roger@gmail.com\",\n        \"department\": \"TI\",\n        \"userName\": \"Roger\",\n        \"phoneNumber\": \"99999999999\"\n    }\n]"
+            }
+          ]
+        },
+        {
+          "name": "Requester",
+          "id": "4aa463c8-1dba-4349-b8a4-0fa3c97edc14",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"fullName\": \"Rogerio\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/requesters/{{requester_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters",
+                "{{requester_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "177f01cb-c660-4f58-baf1-5274a18355c0",
+              "name": "Requester",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"fullName\": \"Rogerio\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/requesters/{{requester_id}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters",
+                    "{{requester_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 00:54:54 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "120"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"fullName\": \"Rogerio\",\n    \"email\": \"roger@gmail.com\",\n    \"department\": \"TI\",\n    \"userName\": \"Roger\",\n    \"phoneNumber\": \"99999999999\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Requester",
+          "id": "fe7eaf5d-8a7c-4f62-ba89-532a962df28e",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/requesters/{{requester_id}}",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "requesters",
+                "{{requester_id}}"
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b2be5f08-f950-452c-a732-781614c799b3",
+              "name": "Requester",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/requesters/{{requester_id}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "requesters",
+                    "{{requester_id}}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "Text",
+              "header": [
+                {
+                  "key": "date",
+                  "value": "Mon, 16 Feb 2026 00:55:47 GMT"
+                },
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "content-length",
+                  "value": "120"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 1,\n    \"fullName\": \"Rogerio\",\n    \"email\": \"roger@gmail.com\",\n    \"department\": \"TI\",\n    \"userName\": \"Roger\",\n    \"phoneNumber\": \"99999999999\"\n}"
+            }
+          ]
+        }
+      ],
+      "id": "3af5a109-f187-4b57-a4ae-81b648145eba"
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const resposta = pm.response.json();\r",
+              "\r",
+              "pm.collectionVariables.set(\"jwt_token\", resposta.access_token);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "id": "0036b01b-0091-4241-aa1a-d8db6a7341f5"
+          }
+        }
+      ],
+      "id": "4e458189-ebd6-49ec-bd9f-7cb3314c7128",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"usuario\",\r\n  \"password\": \"senha123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "jwt",
+    "jwt": [
+      {
+        "key": "algorithm",
+        "value": "HS256",
+        "type": "string"
+      },
+      {
+        "key": "isSecretBase64Encoded",
+        "value": false,
+        "type": "boolean"
+      },
+      {
+        "key": "payload",
+        "value": "{}",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "headerPrefix",
+        "value": "Bearer",
+        "type": "string"
+      },
+      {
+        "key": "queryParamKey",
+        "value": "token",
+        "type": "string"
+      },
+      {
+        "key": "header",
+        "value": "{}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "id": "1ece0ff1-dbfa-48f6-861c-3adae6cbb957",
+      "key": "id",
+      "value": ""
+    },
+    {
+      "id": "c9b6ed8a-b461-4f22-a852-0058f6d8cb9c",
+      "key": "jwt_token",
+      "value": ""
+    },
+    {
+      "id": "5e1d91ca-21ec-44b4-a33c-3e3dff1f61f4",
+      "key": "requester_id",
+      "value": ""
+    },
+    {
+      "id": "c839e69c-e5c1-4647-9071-71fcf3cbc364",
+      "key": "service_id",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
